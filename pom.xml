@@ -7,6 +7,8 @@
     <modules>
         <module>spring-cloud-eureka</module>
         <module>spring-cloud-provider</module>
+        <module>srping-cloud-common</module>
+        <module>spring-cloud-consumer-feign</module>
     </modules>
 
     <parent>

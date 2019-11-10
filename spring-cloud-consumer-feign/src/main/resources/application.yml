@@ -1,11 +1,16 @@
-server:
-  port: 7001
 spring:
   application:
-    name: springcloud-provider
+    name: springcloud-consumer-feign
+server:
+  port: 8001
 eureka:
   client:
     register-with-eureka: true
     fetch-registry: true
     service-url:
       defaultZone: http://peer1:6001/eureka/,http://peer2:6001/eureka/
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
