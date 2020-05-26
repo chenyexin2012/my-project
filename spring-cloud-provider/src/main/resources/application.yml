@@ -3,6 +3,106 @@ server:
 spring:
   application:
     name: springcloud-provider
+  shardingsphere:
+    datasource:
+      # 数据源名称，不能留有空格
+      names: master0,slave0,master1,slave1,master2,slave2
+      master0:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        type: com.alibaba.druid.pool.DruidDataSource
+        url: jdbc:mysql://peer1:3306/springcloud_0?useSSL=false&serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8
+        username: root
+        password: 123456
+      slave0:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        type: com.alibaba.druid.pool.DruidDataSource
+        url: jdbc:mysql://peer2:3306/springcloud_0?useSSL=false&serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8
+        username: root
+        password: 123456
+      master1:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        type: com.alibaba.druid.pool.DruidDataSource
+        url: jdbc:mysql://peer1:3306/springcloud_1?useSSL=false&serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8
+        username: root
+        password: 123456
+      slave1:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        type: com.alibaba.druid.pool.DruidDataSource
+        url: jdbc:mysql://peer2:3306/springcloud_1?useSSL=false&serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8
+        username: root
+        password: 123456
+      master2:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        type: com.alibaba.druid.pool.DruidDataSource
+        url: jdbc:mysql://peer1:3306/springcloud_2?useSSL=false&serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8
+        username: root
+        password: 123456
+      slave2:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        type: com.alibaba.druid.pool.DruidDataSource
+        url: jdbc:mysql://peer2:3306/springcloud_2?useSSL=false&serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8
+        username: root
+        password: 123456
+#    masterslave:
+#      name: ms
+#      master-data-source-name: master0
+#      slave-data-source-names: slave0
+    props:
+      # 打印sql日志
+      sql:
+        show: true
+    sharding:
+      # 默认数据库分片策略，同分库策略
+      # 若配置了master-slave-rules则下面数据源的名称必须与master-slave-rules的配置相同
+      # 否则和shardingsphere.datasource.names下的配置一致，建议多处配置使用同一别名
+#      default-database-strategy:
+#        inline:
+#          sharding-column: id
+#          algorithm-expression: master$->{id % 3}
+      # 分表配置，注意表名是否正确! 注意表名是否正确! 注意表名是否正确!
+      #         注意表名是否正确! 注意表名是否正确! 注意表名是否正确!
+      tables:
+        t_user:
+          actual-data-nodes: master$->{0..2}.t_user_$->{0..3}
+          # 分库策略
+          database-strategy:
+            inline:
+              sharding-column: id  #分片列名称
+              algorithm-expression: master$->{id % 3}  #分片算法行表达式
+          # 分表策略
+          table-strategy:
+            inline:
+              sharding-column: id
+              algorithm-expression: t_user_$->{id % 4}
+        t_order:
+          actual-data-nodes: master$->{0..2}.t_order_$->{0..3}
+          database-strategy:
+            inline:
+              sharding-column: user_id
+              algorithm-expression: master$->{user_id % 3}
+          table-strategy:
+            inline:
+              sharding-column: user_id
+              algorithm-expression: t_order_$->{user_id % 4}
+      # 读写分离配置，使用了此配置，则default-database-strategy和tables的配置中数据源名要和下面的一致
+      # 如 ds0 和 ds$->{id % 3}，建议多处配置使用同一别名，此处为区分不使用相同别名
+#      master-slave-rules:
+#        ds0:
+#          master-data-source-name: master0
+#          slave-data-source-names: slave0
+#        ds1:
+#          master-data-source-name: master1
+#          slave-data-source-names: slave1
+#        ds2:
+#          master-data-source-name: master2
+#          slave-data-source-names: slave2
+      # 绑定表，此处配置失效，应该与分片字段名有关
+#      binding-tables: t_user,t_order
+
+mybatis:
+  config-location: classpath:mybatis/mybatis-config.xml
+  mapper-locations: classpath:mybatis/mapper/*.xml
+
 eureka:
   client:
     register-with-eureka: true

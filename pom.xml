@@ -40,7 +40,23 @@
         <jetty.maven.plugin.version>9.2.1.v20140609</jetty.maven.plugin.version>
 
         <spring.cloud.version>Greenwich.SR3</spring.cloud.version>
+        <mybatis.spring.boot.version>2.1.1</mybatis.spring.boot.version>
+        <mysql.connector.version>8.0.18</mysql.connector.version>
+        <alibaba.druid.version>1.1.21</alibaba.druid.version>
+        <sharding-sphere.version>4.1.0</sharding-sphere.version>
     </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+    </dependencies>
 
     <dependencyManagement>
         <dependencies>

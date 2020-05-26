@@ -4,6 +4,8 @@ spring:
 server:
   port: 6001
 eureka:
+  instance:
+    hostname: peer1
   client:
     fetch-registry: true
     register-with-eureka: true
