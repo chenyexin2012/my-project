@@ -6,6 +6,7 @@ import com.holmes.springcloud.provider.service.OrderService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -37,6 +38,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public int insert(Order order) {
+        order.setCreateTime(new Date());
+        order.setModifyTime(new Date());
         return orderMapper.insert(order);
     }
 
@@ -47,6 +50,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public int update(Order order) {
+        order.setModifyTime(new Date());
         return orderMapper.updateByPrimaryKey(order);
     }
 

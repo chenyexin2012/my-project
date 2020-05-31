@@ -58,44 +58,50 @@ spring:
 #      default-database-strategy:
 #        inline:
 #          sharding-column: id
-#          algorithm-expression: master$->{id % 3}
+#          algorithm-expression: $master->{id % 3}
       # 分表配置，注意表名是否正确! 注意表名是否正确! 注意表名是否正确!
       #         注意表名是否正确! 注意表名是否正确! 注意表名是否正确!
       tables:
         t_user:
-          actual-data-nodes: master$->{0..2}.t_user_$->{0..3}
+          actual-data-nodes: ds$->{0..2}.t_user_$->{0..3}
           # 分库策略
           database-strategy:
             inline:
               sharding-column: id  #分片列名称
-              algorithm-expression: master$->{id % 3}  #分片算法行表达式
+              algorithm-expression: ds$->{id % 3}  #分片算法行表达式
           # 分表策略
           table-strategy:
             inline:
               sharding-column: id
               algorithm-expression: t_user_$->{id % 4}
+          key-generator:
+            column: id
+            type: SNOWFLAKE
         t_order:
-          actual-data-nodes: master$->{0..2}.t_order_$->{0..3}
+          actual-data-nodes: ds$->{0..2}.t_order_$->{0..3}
           database-strategy:
             inline:
               sharding-column: user_id
-              algorithm-expression: master$->{user_id % 3}
+              algorithm-expression: ds$->{user_id % 3}
           table-strategy:
             inline:
               sharding-column: user_id
               algorithm-expression: t_order_$->{user_id % 4}
+          key-generator:
+            column: id
+            type: SNOWFLAKE
       # 读写分离配置，使用了此配置，则default-database-strategy和tables的配置中数据源名要和下面的一致
       # 如 ds0 和 ds$->{id % 3}，建议多处配置使用同一别名，此处为区分不使用相同别名
-#      master-slave-rules:
-#        ds0:
-#          master-data-source-name: master0
-#          slave-data-source-names: slave0
-#        ds1:
-#          master-data-source-name: master1
-#          slave-data-source-names: slave1
-#        ds2:
-#          master-data-source-name: master2
-#          slave-data-source-names: slave2
+      master-slave-rules:
+        ds0:
+          master-data-source-name: master0
+          slave-data-source-names: slave0
+        ds1:
+          master-data-source-name: master1
+          slave-data-source-names: slave1
+        ds2:
+          master-data-source-name: master2
+          slave-data-source-names: slave2
       # 绑定表，此处配置失效，应该与分片字段名有关
 #      binding-tables: t_user,t_order
 

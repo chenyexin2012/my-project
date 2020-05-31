@@ -6,6 +6,7 @@ import com.holmes.springcloud.provider.service.UserService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -26,6 +27,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public int insert(User record) {
+        record.setCreateTime(new Date());
+        record.setModifyTime(new Date());
         return userMapper.insert(record);
     }
 
@@ -36,6 +39,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public int update(User record) {
+        record.setModifyTime(new Date());
         return userMapper.updateByPrimaryKey(record);
     }
 
