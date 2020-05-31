@@ -9,6 +9,7 @@
         <module>spring-cloud-provider</module>
         <module>spring-cloud-common</module>
         <module>spring-cloud-consumer-feign</module>
+        <module>spring-cloud-zuul</module>
     </modules>
 
     <parent>

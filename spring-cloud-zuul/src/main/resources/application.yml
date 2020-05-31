@@ -1,16 +1,17 @@
+server:
+  port: 5555
 spring:
   application:
-    name: springcloud-consumer-feign
-server:
-  port: 8080
+    name: springcloud-api-gateway
+zuul:
+  routes:
+    api-a:
+      path: /api-a/**
+      service-id: springcloud-consumer-feign
 eureka:
   client:
     register-with-eureka: true
     fetch-registry: true
     service-url:
       defaultZone: http://peer1:6001/eureka/,http://peer2:6001/eureka/
-management:
-  endpoints:
-    web:
-      exposure:
-        include: "*"
+

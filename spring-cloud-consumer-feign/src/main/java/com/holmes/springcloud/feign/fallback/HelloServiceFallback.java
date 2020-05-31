@@ -4,10 +4,12 @@ import com.holmes.springcloud.entity.User;
 import com.holmes.springcloud.feign.service.HelloServiceFeignClient;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
 public class HelloServiceFallback implements HelloServiceFeignClient {
+
 //    @Override
 //    public String hello(String name) {
 //        return null;
@@ -15,17 +17,17 @@ public class HelloServiceFallback implements HelloServiceFeignClient {
 
     @Override
     public List<User> selectList() {
-        return null;
+        return new ArrayList<>();
     }
 
     @Override
     public int delete(Long id) {
-        return 0;
+        return -1;
     }
 
     @Override
     public int insert(User user) {
-        return 0;
+        return -1;
     }
 
     @Override
@@ -35,11 +37,11 @@ public class HelloServiceFallback implements HelloServiceFeignClient {
 
     @Override
     public int update(User user) {
-        return 0;
+        return -1;
     }
 
     @Override
     public int clearTable() {
-        return 0;
+        return -1;
     }
 }
