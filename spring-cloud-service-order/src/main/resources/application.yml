@@ -1,0 +1,84 @@
+server:
+  port: 8082
+spring:
+  application:
+    name: order-service
+  shardingsphere:
+    datasource:
+      # 数据源名称，不能留有空格
+      names: master0,slave0,master1,slave1,master2,slave2
+      master0:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        type: com.alibaba.druid.pool.DruidDataSource
+        url: jdbc:mysql://peer1:3306/springcloud_0?useSSL=false&serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8
+        username: root
+        password: 123456
+      slave0:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        type: com.alibaba.druid.pool.DruidDataSource
+        url: jdbc:mysql://peer2:3306/springcloud_0?useSSL=false&serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8
+        username: root
+        password: 123456
+      master1:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        type: com.alibaba.druid.pool.DruidDataSource
+        url: jdbc:mysql://peer1:3306/springcloud_1?useSSL=false&serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8
+        username: root
+        password: 123456
+      slave1:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        type: com.alibaba.druid.pool.DruidDataSource
+        url: jdbc:mysql://peer2:3306/springcloud_1?useSSL=false&serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8
+        username: root
+        password: 123456
+      master2:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        type: com.alibaba.druid.pool.DruidDataSource
+        url: jdbc:mysql://peer1:3306/springcloud_2?useSSL=false&serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8
+        username: root
+        password: 123456
+      slave2:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        type: com.alibaba.druid.pool.DruidDataSource
+        url: jdbc:mysql://peer2:3306/springcloud_2?useSSL=false&serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8
+        username: root
+        password: 123456
+    props:
+      sql:
+        show: true
+    sharding:
+      tables:
+        t_order:
+          actual-data-nodes: ds$->{0..2}.t_order_$->{0..3}
+          database-strategy:
+            inline:
+              sharding-column: user_id
+              algorithm-expression: ds$->{user_id % 3}
+          table-strategy:
+            inline:
+              sharding-column: user_id
+              algorithm-expression: t_order_$->{user_id % 4}
+          key-generator:
+            column: id
+            type: SNOWFLAKE
+      master-slave-rules:
+        ds0:
+          master-data-source-name: master0
+          slave-data-source-names: slave0
+        ds1:
+          master-data-source-name: master1
+          slave-data-source-names: slave1
+        ds2:
+          master-data-source-name: master2
+          slave-data-source-names: slave2
+
+mybatis:
+  config-location: classpath:mybatis/mybatis-config.xml
+  mapper-locations: classpath:mybatis/mapper/*.xml
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://peer1:6001/eureka/,http://peer2:6001/eureka/

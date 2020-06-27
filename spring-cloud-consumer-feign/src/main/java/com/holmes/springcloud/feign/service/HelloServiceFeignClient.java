@@ -1,9 +1,12 @@
 package com.holmes.springcloud.feign.service;
 
 import com.holmes.springcloud.feign.fallback.HelloServiceFallback;
-import com.holmes.springcloud.service.UserServiceFeign;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @FeignClient(value = "springcloud-provider", fallback = HelloServiceFallback.class)
-public interface HelloServiceFeignClient extends UserServiceFeign {
+public interface HelloServiceFeignClient {
+
+    @GetMapping(value = "hello")
+    String hello(String name);
 }
