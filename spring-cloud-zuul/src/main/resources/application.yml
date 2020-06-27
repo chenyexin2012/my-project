@@ -1,5 +1,5 @@
 server:
-  port: 5555
+  port: 8080
 spring:
   application:
     name: springcloud-api-gateway
@@ -8,6 +8,12 @@ zuul:
     api-a:
       path: /api-a/**
       service-id: springcloud-consumer-feign
+    user:
+      path: /user/**
+      service-id: user-service
+    order:
+      path: /order/**
+      service-id: order-service
 eureka:
   client:
     register-with-eureka: true
