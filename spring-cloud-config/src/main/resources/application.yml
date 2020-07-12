@@ -3,13 +3,24 @@ server:
 spring:
   application:
     name: config-server
-  profiles:
-    # 使用本地文件系统
-    active: native
+#  profiles:
+#    # 使用本地文件系统
+#    active: native
   cloud:
     config:
      server:
-      native:
-        # 配置文件存放路径
-        search-locations: classpath:/shared
-
+#      native:
+#        # 配置文件存放路径
+#        search-locations: classpath:/shared
+      # 使用Git仓库
+      git:
+        uri: http://peer3:3000/holmes/springcloud-config/
+        search-paths: /shared
+        username: holmes
+        password: Passwd123!
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://peer1:6001/eureka/,http://peer2:6001/eureka/,http://peer3:6001/eureka/

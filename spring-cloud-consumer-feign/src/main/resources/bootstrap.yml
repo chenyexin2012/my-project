@@ -3,9 +3,19 @@ spring:
     name: springcloud-consumer-feign
   cloud:
     config:
-      uri: http://localhost:5001
+#      uri: http://localhost:5001
+      discovery:
+        enabled: true
+        service-id: config-server
       fail-fast: true
       profile: dev
 
 server:
   port: 8083
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://peer1:6001/eureka/,http://peer2:6001/eureka/,http://peer3:6001/eureka/
