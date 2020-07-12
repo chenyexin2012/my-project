@@ -1,0 +1,10 @@
+server:
+  port: 7001
+spring:
+  application:
+    name: springcloud-provider
+  cloud:
+    config:
+      uri: http://localhost:5001
+      fail-fast: true
+      profile: dev

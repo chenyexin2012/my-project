@@ -12,6 +12,7 @@
         <module>spring-cloud-zuul</module>
         <module>spring-cloud-service-user</module>
         <module>spring-cloud-service-order</module>
+        <module>spring-cloud-config</module>
     </modules>
 
     <parent>

@@ -1,0 +1,15 @@
+server:
+  port: 5001
+spring:
+  application:
+    name: config-server
+  profiles:
+    # 使用本地文件系统
+    active: native
+  cloud:
+    config:
+     server:
+      native:
+        # 配置文件存放路径
+        search-locations: classpath:/shared
+
