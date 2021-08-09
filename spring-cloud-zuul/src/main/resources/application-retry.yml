@@ -1,0 +1,57 @@
+##################################################################################
+##################################  配置重试策略 ##################################
+##################################################################################
+
+server:
+  port: 8080
+spring:
+  application:
+    name: springcloud-api-gateway
+zuul:
+  #  默认使用信号量隔离
+  #  ribbon-isolation-strategy: semaphore
+  #  semaphore:
+  #    max-semaphores: 10
+  #  使用线程池隔离
+  ribbon-isolation-strategy: thread
+  thread-pool:
+    # 每个路由有自己的线程池，不共享
+    use-separate-thread-pools: true
+    # 线程名的前缀
+    thread-pool-key-prefix: my-thread-
+  routes:
+    api-a:
+      path: /api-a/**
+      service-id: springcloud-consumer-feign
+    user:
+      path: /user/**
+      service-id: user-service
+    order:
+      path: /order/**
+      service-id: order-service
+
+hystrix:
+  threadpool:
+    default:
+      coreSize: 500    # 线程池的核心线程数，即并发执行的最大线程数，默认10
+      maxQueueSize: 1000 # 线程池阻塞队列的最大长度，默认-1
+      queueSizeRejectionThreshold: 500 # 即使没有达到maxQueueSize，达到此值，请求也会被拒绝，默认值5，当maxQueueSize为-1时，此属性不生效
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 30000  #熔断超时时间
+
+ribbon:
+  ReadTimeout: 3000  #请求处理的超时时间
+  ConnectTimeout: 2000 #请求连接超时时间
+  MaxAutoRetries: 0 #对当前实例的重试次数
+  MaxAutoRetriesNextServer: 1 #切换实例的重试次数 1
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:6001/eureka/

@@ -1,0 +1,8 @@
+server:
+  servlet:
+    context-path: /ribbon
+spring:
+  application:
+    name: springcloud-ribbon
+  profiles:
+    active: local

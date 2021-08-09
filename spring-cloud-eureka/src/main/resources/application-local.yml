@@ -1,0 +1,13 @@
+server:
+  port: 6001
+eureka:
+  instance:
+    hostname: localhost
+  server:
+    enable-self-preservation: false # 关闭自我保护功能，默认开启
+    eviction-interval-timer-in-ms: 3000
+  client:
+    fetch-registry: false # 是否从Eureka Server获取注册的服务信息
+    register-with-eureka: false # 是否将自己注册到Eureka Server
+    service-url:
+      defaultZone: http://localhost:6001/eureka/

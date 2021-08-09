@@ -3,10 +3,5 @@ server:
 spring:
   application:
     name: springcloud-provider
-
-eureka:
-  client:
-    register-with-eureka: true
-    fetch-registry: true
-    service-url:
-      defaultZone: http://peer1:6001/eureka/,http://peer2:6001/eureka/
+  profiles:
+    active: local

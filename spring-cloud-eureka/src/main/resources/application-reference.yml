@@ -1,0 +1,20 @@
+server:
+  port: 6001
+eureka:
+  instance:
+    hostname: localhost
+    # 默认false，不使用主机名来定义注册中心的地址
+    # 为true
+    prefer-ip-address: false
+    ip-address: 1.1.1.1
+  server:
+    # Eureka会统计15分钟之内心跳失败的比例低于85%将会触发保护机制，不剔除服务提供者，如果关闭服务注册中心将不可用的实例正确剔除
+    # 关闭注册中心的保护机制，默认为true
+    enable-self-preservation: false
+    #
+    eviction-interval-timer-in-ms: 3000
+  client:
+    fetch-registry: false # 是否从Eureka Server获取注册的服务信息
+    register-with-eureka: false # 是否将自己注册到Eureka Server
+    service-url:
+      defaultZone: http://localhost:6001/eureka/

@@ -11,3 +11,5 @@ eureka:
     register-with-eureka: true
     service-url:
       defaultZone: http://peer2:6001/eureka/
+
+# 需要配置不同的域名，否则在单机上无法模拟集群
