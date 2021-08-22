@@ -25,23 +25,22 @@ public class HystrixCommandTest {
 
         // 线程池配置
         HystrixThreadPoolProperties.Setter threadPoolPropertiesSetter = HystrixThreadPoolProperties.Setter()
-                // 核心线程数
+                // 核心线程数，默认值10
                 .withCoreSize(8)
-                // 最大线程数
+                // 最大线程数，默认值10
                 .withMaximumSize(32)
                 // 作业队列的最大值
                 // 值为-1，那么使用SynchronousQueue，否则正数将会使用LinkedBlockingQueue。
-                // 值为0，Hystrix不会向队列内存放作业
                 .withMaxQueueSize(1000)
-                // 非核心线程存活时间
+                // 非核心线程存活时间，默认值-1，表示不过期
                 .withKeepAliveTimeMinutes(30)
-                // 设置队列拒绝请求的阀值，即使队列没有到达最大值，也拒绝
+                // 设置队列拒绝请求的阀值，即使队列没有到达最大值，也拒绝，默认值5
                 .withQueueSizeRejectionThreshold(10)
-                // 允许扩充至最大线程数，为false则maximumSize不作用
+                // 允许扩充至最大线程数，为false则maximumSize不作用，默认值false
                 .withAllowMaximumSizeToDivergeFromCoreSize(true)
-                // 统计的时间
+                // 统计的时间，默认10000
                 .withMetricsRollingStatisticalWindowInMilliseconds(10000)
-                // 每个滑动窗口被拆分成多少个bucket
+                // 每个滑动窗口被拆分成多少个bucket，默认10
                 .withMetricsRollingStatisticalWindowBuckets(10);
 
         // 熔断参数配置
@@ -109,6 +108,33 @@ public class HystrixCommandTest {
                 .andThreadPoolKey(HystrixThreadPoolKey.Factory.asKey("hystrix-command"))
                 .andThreadPoolPropertiesDefaults(threadPoolPropertiesSetter)
                 .andCommandPropertiesDefaults(commandPropertiesSetter);
+    }
+
+    /**
+     * 测试线程配置
+     */
+    @Test
+    public void testThread() {
+
+        // 线程池配置
+        HystrixThreadPoolProperties.Setter threadPoolPropertiesSetter =
+                HystrixThreadPoolProperties.Setter()
+                        .withCoreSize(4)
+                        .withMaximumSize(8)
+                        .withAllowMaximumSizeToDivergeFromCoreSize(true)
+                        .withMaxQueueSize(-1)
+                        .withQueueSizeRejectionThreshold(10);
+
+        HystrixCommand.Setter hystrixCommandSetter = HystrixCommand.Setter
+                .withGroupKey(HystrixCommandGroupKey.Factory.asKey("helloHystrixCommand"))
+                .andCommandKey(HystrixCommandKey.Factory.asKey("commandKey"))
+                .andThreadPoolKey(HystrixThreadPoolKey.Factory.asKey("hello-hystrix-command-thread"))
+                .andThreadPoolPropertiesDefaults(threadPoolPropertiesSetter);
+
+        for (int i = 0; i < 100; i++) {
+            HelloHystrixCommand helloHystrixCommand = new HelloHystrixCommand(hystrixCommandSetter);
+            helloHystrixCommand.execute();
+        }
     }
 
     @After
