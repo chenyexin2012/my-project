@@ -135,6 +135,7 @@ public class HystrixCommandTest {
             HelloHystrixCommand helloHystrixCommand = new HelloHystrixCommand(hystrixCommandSetter);
             helloHystrixCommand.execute();
         }
+
     }
 
     @After
