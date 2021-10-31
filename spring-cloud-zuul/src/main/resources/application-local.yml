@@ -1,21 +1,6 @@
 server:
   port: 8080
 
-zuul:
-  routes:
-    ribbon-api:
-      path: /ribbon/**
-      service-id: springcloud-zuul
-    api-a:
-      path: /api-a/**
-      service-id: springcloud-consumer-feign
-    user:
-      path: /user/**
-      service-id: user-service
-    order:
-      path: /order/**
-      service-id: order-service
-
 eureka:
   client:
     register-with-eureka: true

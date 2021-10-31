@@ -19,16 +19,7 @@ zuul:
     use-separate-thread-pools: true
     # 线程名的前缀
     thread-pool-key-prefix: my-thread-
-  routes:
-    api-a:
-      path: /api-a/**
-      service-id: springcloud-consumer-feign
-    user:
-      path: /user/**
-      service-id: user-service
-    order:
-      path: /order/**
-      service-id: order-service
+  retryable: false
 
 hystrix:
   threadpool:
@@ -41,13 +32,15 @@ hystrix:
       execution:
         isolation:
           thread:
-            timeoutInMilliseconds: 30000  #熔断超时时间
+            timeoutInMilliseconds: 50000  #熔断超时时间
 
 ribbon:
-  ReadTimeout: 3000  #请求处理的超时时间
+  ReadTimeout: 1000  #请求处理的超时时间
   ConnectTimeout: 2000 #请求连接超时时间
-  MaxAutoRetries: 0 #对当前实例的重试次数
+  MaxAutoRetries: 1 #对当前实例的重试次数
   MaxAutoRetriesNextServer: 1 #切换实例的重试次数 1
+  OkToRetryOnAllOperations: true
+
 
 eureka:
   client:

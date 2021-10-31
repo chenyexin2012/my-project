@@ -2,5 +2,5 @@ spring:
   application:
     name: springcloud-zuul
   profiles:
-    active: local
+    active: retry,router
 
